@@ -144,6 +144,9 @@ const SearchBarControl = (props) => {
           <IconButton size="small" onClick={props.reset}>
             <CloseIcon />
           </IconButton>
+          <Grid item style={{ margin: 'auto auto' }}>
+          <span>Answer is {props.answers}</span>
+        </Grid>
         </Grid>
       )}
     </Grid>
@@ -152,9 +155,9 @@ const SearchBarControl = (props) => {
 
 const SearchIndicator = (props) => {
   // if there are not answers found, then we go blank
-  if (props.state === SearchBarState.DONE && props.answers.length === 0) {
-    return <span style={{ textAlign: 'center' }}>No Results</span>;
-  }
+  // if (props.state === SearchBarState.DONE && props.answers.length === 0) {
+  //   return <span style={{ textAlign: 'center' }}>No Results</span>;
+  // }
 
   if (props.answers.length === 0) {
     return null;

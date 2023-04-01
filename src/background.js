@@ -78,11 +78,30 @@ const getAnswerFromBackend = (msg) => {
       const endTime = Math.trunc(answers.sources.split("-")[1].trim())
 
       const videoUrl = `https://www.youtube.com/embed/${videoId}?start=${startTime}&end=${endTime}`
-      chrome.tabs.create({ url: videoUrl });
+      // chrome.tabs.create({ url: videoUrl });
       // sendMessageToContent({
       //   type: MessageType.HIGHLIGHT_ANSWER,
       //   answer: answers
       // });
+
+      chrome.runtime.sendMessage(
+        {
+          type: MessageType.SEARCH_OPERATION_DONE,
+        }
+      );
+
+      chrome.runtime.sendMessage(
+        {
+          type: MessageType.MAKE_ANSWERS_ITERABLE,
+          answers: [msg.response]
+        }
+      );
+
+      setTimeout(() => {
+        chrome.tabs.create({ url: videoUrl });
+      }, "5000");
+
+      // setTimeout(chrome.tabs.create({ url: videoUrl }), 5000);
 
       console.log("background: successfully done");
     });
