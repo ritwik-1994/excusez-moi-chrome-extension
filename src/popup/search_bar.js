@@ -171,7 +171,7 @@ const SearchIndicator = (props) => {
 const SearchBar = (props) => {
   var [answers, setAnswers] = useState([]);
   var [errors, setErrors] = useState([]);
-  var [state, setState] = useState(SearchBarState.PREPARATION_ONGOING);
+  var [state, setState] = useState(SearchBarState.READY);
   var [selectionIdx, setSelectionIdx] = useState(0);
   var [input, setInput] = useState('');
 

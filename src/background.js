@@ -52,14 +52,14 @@ const askBackendToPrepare = (msg) => {
 
 // this function calls the backend with the question expecting an apt answer
 const getAnswerFromBackend = (msg) => {
-  fetch("https://xcuzme.taptappers.club/api/v1/answer", {
+  fetch("http://localhost:8000/response", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
       "url": msg.url,
-      "content": msg.query
+      "query": msg.query
     })
   })
     .then(response => {
@@ -72,10 +72,17 @@ const getAnswerFromBackend = (msg) => {
       }
     })
     .then(answers => {
-      sendMessageToContent({
-        type: MessageType.HIGHLIGHT_ANSWER,
-        answer: answers
-      });
+      console.log(msg)
+      const videoId = msg.url.split("=")[1]
+      const startTime = Math.trunc(answers.sources.split("-")[0].trim())
+      const endTime = Math.trunc(answers.sources.split("-")[1].trim())
+
+      const videoUrl = `https://www.youtube.com/embed/${videoId}?start=${startTime}&end=${endTime}`
+      chrome.tabs.create({ url: videoUrl });
+      // sendMessageToContent({
+      //   type: MessageType.HIGHLIGHT_ANSWER,
+      //   answer: answers
+      // });
 
       console.log("background: successfully done");
     });
@@ -90,14 +97,15 @@ chrome.runtime.onMessage.addListener((msg, sender, callback) => {
     case MessageType.SEARCH_OPERATION_DONE:
     case MessageType.SELECT:
     case MessageType.CLEAR:
-      break;
-
     case MessageType.POPUP_LOADED:
-      sendMessageToContent({
-        type: MessageType.SCRAPE_CONTENT_TEXT
-      });
-
       break;
+
+    // case MessageType.POPUP_LOADED:
+    //   sendMessageToContent({
+    //     type: MessageType.SCRAPE_CONTENT_TEXT
+    //   });
+
+    //   break;
 
     case MessageType.PREPARE:
       return askBackendToPrepare(msg);
