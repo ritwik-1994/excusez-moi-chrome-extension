@@ -49,6 +49,7 @@ const registerListener = (setState, setAnswers, setErrors) => {
         setAnswers((answers) =>
           [...answers, ...msg.answers]
         );
+        setState(SearchBarState.DONE);
         break;
 
       case MessageType.SEARCH_OPERATION_DONE:
@@ -90,6 +91,7 @@ const SearchBarInput = (props) => {
 };
 
 const SearchBarControl = (props) => {
+  console.log(props.answers)
   if (props.state === SearchBarState.PREPARATION_ONGOING) {
     return (
       <Grid container spacing={2}>
@@ -145,7 +147,7 @@ const SearchBarControl = (props) => {
             <CloseIcon />
           </IconButton>
           <Grid item style={{ margin: 'auto auto' }}>
-          <span>Answer is {props.answers}</span>
+          <span>{props.answers}</span>
         </Grid>
         </Grid>
       )}

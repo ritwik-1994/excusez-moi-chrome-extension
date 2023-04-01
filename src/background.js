@@ -52,13 +52,14 @@ const askBackendToPrepare = (msg) => {
 
 // this function calls the backend with the question expecting an apt answer
 const getAnswerFromBackend = (msg) => {
-  fetch("http://localhost:8000/response", {
+  const video_id = msg.url.split("=")[1]
+
+  fetch(`http://localhost:8000/response?video_id=${video_id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      "url": msg.url,
       "query": msg.query
     })
   })
@@ -86,20 +87,20 @@ const getAnswerFromBackend = (msg) => {
 
       chrome.runtime.sendMessage(
         {
-          type: MessageType.SEARCH_OPERATION_DONE,
+          type: MessageType.MAKE_ANSWERS_ITERABLE,
+          answers: [answers.response]
         }
       );
 
-      chrome.runtime.sendMessage(
-        {
-          type: MessageType.MAKE_ANSWERS_ITERABLE,
-          answers: [msg.response]
-        }
-      );
+      // chrome.runtime.sendMessage(
+      //   {
+      //     type: MessageType.SEARCH_OPERATION_DONE,
+      //   }
+      // );
 
       setTimeout(() => {
         chrome.tabs.create({ url: videoUrl });
-      }, "5000");
+      }, "15000");
 
       // setTimeout(chrome.tabs.create({ url: videoUrl }), 5000);
 
